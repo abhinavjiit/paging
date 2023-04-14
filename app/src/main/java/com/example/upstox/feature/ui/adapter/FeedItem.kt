@@ -1,6 +1,6 @@
 package com.example.upstox.feature.ui.adapter
 
-import com.example.upstox.core.IRecyclerItemViewModel
+import com.example.upstox.base.IRecyclerItemViewModel
 
 sealed class FeedItem(private val layoutId: Int) : IRecyclerItemViewModel {
 

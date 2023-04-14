@@ -1,4 +1,4 @@
-package com.example.upstox.core
+package com.example.upstox.base
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
