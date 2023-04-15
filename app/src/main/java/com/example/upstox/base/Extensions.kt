@@ -24,8 +24,6 @@ suspend fun <T : Any> performNetworkCall(
     return flow {
         val response = networkApiCall()
         if (response.isSuccessful) {
-            //save in db via polling
-            // steps
             response.body()?.let { emit(IResult.Success(it)) }
                 ?: emit(IResult.Error(IOException("API call successful but empty response body")))
             return@flow

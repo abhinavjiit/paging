@@ -16,7 +16,6 @@ abstract class IBaseRecyclerViewAdapter<Item : IRecyclerItemViewModel?>(var item
         val binding =
             DataBindingUtil.inflate(layoutInflater, viewType, parent, false) as ViewDataBinding
         val viewHolder = BaseBindingViewHolder(binding)
-        registerItemClick(viewHolder, viewType, viewHolder.adapterPosition)
         return viewHolder
     }
 
@@ -98,8 +97,6 @@ abstract class IBaseRecyclerViewAdapter<Item : IRecyclerItemViewModel?>(var item
         this.items.add(this.items.size - 1, data)
         notifyItemChanged(this.items.size - 1)
     }
-
-    abstract fun registerItemClick(holder: BaseBindingViewHolder, viewType: Int, position: Int)
 
     override fun getItemCount(): Int {
         return items.count()
