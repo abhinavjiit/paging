@@ -29,4 +29,7 @@ data class FieldData(
     var investedValue: Double = 0.0,
     var todayPL: Double = 0.0,
     var finalPL: Double = 0.0
+
+
+
 )

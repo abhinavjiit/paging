@@ -4,9 +4,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.retryWhen
-import retrofit2.Call
 import retrofit2.Response
 import java.io.IOException
 
@@ -28,7 +25,15 @@ suspend fun <T : Any> performNetworkCall(
                 ?: emit(IResult.Error(IOException("API call successful but empty response body")))
             return@flow
         }
-        emit(IResult.Error(IOException("API call failed with error - ${response.errorBody()?.string() ?: messageInCaseOfError}")))
+        emit(
+            IResult.Error(
+                IOException(
+                    "API call failed with error - ${
+                        response.errorBody()?.string() ?: messageInCaseOfError
+                    }"
+                )
+            )
+        )
         return@flow
     }.catch { e ->
         emit(IResult.Error(IOException("Exception during network API call: ${e.message}")))
