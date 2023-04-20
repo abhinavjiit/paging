@@ -27,3 +27,20 @@ fun ImageView.setImageUrl(imageUrl: String?) {
         .into(this)
 
 }
+
+@BindingAdapter("app:setImageUrlDetailPage")
+fun ImageView.setImageUrlDetailPage(imageUrl: String?) {
+    val requestOptions = RequestOptions()
+        .override(200, 200)
+
+    val requestBuilder: RequestBuilder<Drawable> = Glide.with(this.context)
+        .asDrawable().sizeMultiplier(0.25f)
+
+    Glide.with(this.context)
+        .load(imageUrl)
+        .thumbnail(requestBuilder)
+        .apply(requestOptions)
+        .error(R.drawable.ic_launcher_background)
+        .into(this)
+
+}
