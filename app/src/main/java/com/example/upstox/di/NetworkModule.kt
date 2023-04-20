@@ -26,7 +26,7 @@ class NetworkModule {
         client: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit = Retrofit.Builder()
-        .baseUrl("https://run.mocky.io/v3/")
+        .baseUrl("https://www.themealdb.com/api/")
         .addConverterFactory(gsonConverterFactory)
         .client(client)
         .build()

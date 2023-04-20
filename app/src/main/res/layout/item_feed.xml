@@ -6,7 +6,12 @@
 
         <variable
             name="item"
-            type="com.example.upstox.feature.data.model.FeedListItem" />
+            type="com.example.upstox.feature.data.model.Meal" />
+
+
+        <variable
+            name="callback"
+            type="com.example.upstox.feature.ui.fragment.itemlist.FeedFragment.ItemClick" />
 
 
     </data>
@@ -17,68 +22,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="16dp">
+        android:layout_marginVertical="16dp"
+        android:onClick="@{()->callback.onItemClick(item.mealId)}">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvSymbol"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@{item.symbol}"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/barrier"
-            app:layout_constraintEnd_toStartOf="@id/tvLTP"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvLTP"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:text="@{`LTP: `+ `\u20B9 ` + String.valueOf(item.ltp)}"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/barrier"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivItem"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/ic_launcher_background"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvSymbol"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="tvSymbol,tvLTP" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvQuantity"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@{String.valueOf(item.quantity)}"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/tvPNl"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/barrier" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:setImageUrl="@{item.mealThumbnail}" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvPNl"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="end"
-            android:text="@{`P/L: `+ `\u20B9 ` +String.valueOf(item.pnl)}"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@{item.mealTitle}"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvQuantity"
-            app:layout_constraintTop_toBottomOf="@id/barrier" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivItem" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

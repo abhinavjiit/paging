@@ -1,12 +1,12 @@
 package com.example.upstox.feature.ui.activity
 
 import android.os.Bundle
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.upstox.R
-import com.example.upstox.feature.ui.fragment.FeedFragment
+import com.example.upstox.feature.ui.fragment.itemlist.FeedFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -14,14 +14,24 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        supportFragmentManager.beginTransaction().add(R.id.fragmentContainerView, FeedFragment())
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragmentConatineView, FeedFragment())
+            .addToBackStack(null)
             .commit()
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (supportFragmentManager.backStackEntryCount > 1) {
+                supportFragmentManager.popBackStackImmediate()
+            } else {
+                finish()
+            }
+        }
 
     }
 }
-
-
-
 
 
 //

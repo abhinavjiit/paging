@@ -25,9 +25,8 @@ abstract class IBaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
     }
 
     abstract fun getViewBinding(inflater: LayoutInflater): VB
-
+    protected abstract fun setupView()
     protected abstract fun setupObserver()
 
-    protected abstract fun setupView()
 
 }
