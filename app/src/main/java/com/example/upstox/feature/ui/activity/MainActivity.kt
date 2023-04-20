@@ -15,6 +15,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+        if (savedInstanceState != null) {
+            return
+        }
         supportFragmentManager.beginTransaction()
             .add(R.id.fragmentConatineView, FeedFragment())
             .addToBackStack(null)
