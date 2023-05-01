@@ -1,6 +1,8 @@
 package com.example.upstox.di
 
+import com.example.upstox.base.ProductsDeserializer
 import com.example.upstox.feature.data.apiInterface.ApiInterface
+import com.example.upstox.feature.data.model.ResponseModel
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -18,7 +20,7 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun providesOkHttp() = OkHttpClient.Builder().build()
+    fun providesOkHttp(): OkHttpClient = OkHttpClient.Builder().build()
 
     @Singleton
     @Provides
@@ -26,14 +28,18 @@ class NetworkModule {
         client: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit = Retrofit.Builder()
-        .baseUrl("https://www.themealdb.com/api/")
+        .baseUrl("https://private-5fa9f9-sumitmarwhanykaa.apiary-mock.com/")
         .addConverterFactory(gsonConverterFactory)
         .client(client)
         .build()
 
     @Singleton
     @Provides
-    fun gson(): Gson = GsonBuilder().setLenient().create()
+    fun gson(): Gson {
+        val gsonBuilder = GsonBuilder()
+        gsonBuilder.registerTypeAdapter(ResponseModel::class.java, ProductsDeserializer())
+        return gsonBuilder.setLenient().create()
+    }
 
     @Singleton
     @Provides

@@ -1,46 +1,42 @@
 package com.example.upstox.feature.util
 
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.paging.LoadState
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.example.upstox.R
 
 
 @BindingAdapter("app:setImageUrl")
 fun ImageView.setImageUrl(imageUrl: String?) {
-    val requestOptions = RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .override(100, 100)
-
-    val requestBuilder: RequestBuilder<Drawable> = Glide.with(this.context)
-        .asDrawable().sizeMultiplier(0.25f)
-
     Glide.with(this.context)
         .load(imageUrl)
-        .thumbnail(requestBuilder)
-        .apply(requestOptions)
         .error(R.drawable.ic_launcher_background)
         .into(this)
 
 }
 
-@BindingAdapter("app:setImageUrlDetailPage")
-fun ImageView.setImageUrlDetailPage(imageUrl: String?) {
-    val requestOptions = RequestOptions()
-        .override(200, 200)
 
-    val requestBuilder: RequestBuilder<Drawable> = Glide.with(this.context)
-        .asDrawable().sizeMultiplier(0.25f)
+@BindingAdapter("app:setFooter", "app:progressBar")
+fun TextView.setFooter(loadState: LoadState, progressBar: ProgressBar) {
+    when (loadState) {
+        is LoadState.Loading -> {
+            progressBar.show()
+            this.hide()
+        }
+        is LoadState.Error -> {
+            progressBar.hide()
+            this.show()
+        }
+        else -> {
+            progressBar.hide()
+            this.hide()
+        }
 
-    Glide.with(this.context)
-        .load(imageUrl)
-        .thumbnail(requestBuilder)
-        .apply(requestOptions)
-        .error(R.drawable.ic_launcher_background)
-        .into(this)
+
+    }
+
 
 }

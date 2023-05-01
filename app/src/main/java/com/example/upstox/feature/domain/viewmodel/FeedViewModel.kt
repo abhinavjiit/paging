@@ -1,34 +1,39 @@
 package com.example.upstox.feature.domain.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.upstox.base.IResult
-import com.example.upstox.feature.data.model.FeedMealsListModel
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.example.upstox.feature.data.model.FeedItem
 import com.example.upstox.feature.domain.usecase.GetItemListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedViewModel @Inject constructor(private val feedDataUseCase: GetItemListUseCase) :
-    ViewModel() {
+class FeedViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
+    private val useCase: GetItemListUseCase
+) : ViewModel() {
 
-    private var _feedData = MutableLiveData<IResult<FeedMealsListModel>>()
-    val feedData: LiveData<IResult<FeedMealsListModel>> = _feedData
+    private var _saveSateList: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
+    private var _feedItems: MutableStateFlow<PagingData<FeedItem>> =
+        MutableStateFlow(PagingData.empty())
+    val feedItems: StateFlow<PagingData<FeedItem>> = _feedItems
 
-    fun fetchFeedList(endPoint: String) {
+    fun fetchFeedItems() {
         viewModelScope.launch {
-            feedDataUseCase(endPoint).catch {
-                _feedData.postValue(IResult.Error(it))
-            }.collect {
-                _feedData.postValue(it)
+            if (!_saveSateList.value) {
+                useCase().cachedIn(this).collect {
+                    _saveSateList.value = true
+                    _feedItems.value = it
+                }
             }
         }
     }
-
 
 }

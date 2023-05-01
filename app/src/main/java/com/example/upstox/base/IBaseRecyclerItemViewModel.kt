@@ -4,10 +4,26 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class IBaseRecyclerViewAdapter<Item : IRecyclerItemViewModel?>(var items: MutableList<Item>) :
-    RecyclerView.Adapter<IBaseRecyclerViewAdapter.BaseBindingViewHolder>() {
+    PagingDataAdapter<IRecyclerItemViewModel, IBaseRecyclerViewAdapter.BaseBindingViewHolder>(
+        REPO_COMPARATOR
+    ) {
+
+    companion object {
+        private val REPO_COMPARATOR = object : DiffUtil.ItemCallback<IRecyclerItemViewModel>() {
+            override fun areItemsTheSame(
+                oldItem: IRecyclerItemViewModel, newItem: IRecyclerItemViewModel
+            ): Boolean = oldItem.getLayoutId() == newItem.getLayoutId()
+
+            override fun areContentsTheSame(
+                oldItem: IRecyclerItemViewModel, newItem: IRecyclerItemViewModel
+            ): Boolean = oldItem.getLayoutId() == newItem.getLayoutId()
+        }
+    }
 
     private var position = 0
 
@@ -15,12 +31,11 @@ abstract class IBaseRecyclerViewAdapter<Item : IRecyclerItemViewModel?>(var item
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding =
             DataBindingUtil.inflate(layoutInflater, viewType, parent, false) as ViewDataBinding
-        val viewHolder = BaseBindingViewHolder(binding)
-        return viewHolder
+        return BaseBindingViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BaseBindingViewHolder, position: Int) {
-        this.position = holder.adapterPosition
+        this.position = holder.bindingAdapterPosition
         holder.bindData(items[position])
     }
 
@@ -29,10 +44,6 @@ abstract class IBaseRecyclerViewAdapter<Item : IRecyclerItemViewModel?>(var item
             return -1
         }
         return items[position]?.getLayoutId() ?: -1
-    }
-
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
     }
 
     fun getItem(holder: BaseBindingViewHolder): Item {
@@ -110,7 +121,7 @@ abstract class IBaseRecyclerViewAdapter<Item : IRecyclerItemViewModel?>(var item
                 for (pair in it.getBindingPairs()) {
                     if (pair.second is ViewHolderPositionModel) {
                         val model =
-                            ((pair.second) as ViewHolderPositionModel).copy(position = adapterPosition)
+                            ((pair.second) as ViewHolderPositionModel).copy(position = bindingAdapterPosition)
                         binding.setVariable(pair.first, model)
                     } else {
                         binding.setVariable(pair.first, pair.second)
@@ -122,12 +133,5 @@ abstract class IBaseRecyclerViewAdapter<Item : IRecyclerItemViewModel?>(var item
 
     }
 
-    open fun getListener(): Any? {
-        return null
-    }
-
-    open fun getPosition(): Int {
-        return position
-    }
 
 }

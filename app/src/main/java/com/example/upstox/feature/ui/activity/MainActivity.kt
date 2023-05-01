@@ -1,7 +1,6 @@
 package com.example.upstox.feature.ui.activity
 
 import android.os.Bundle
-import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.example.upstox.R
